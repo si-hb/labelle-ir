@@ -27,9 +27,14 @@ It includes:
 
 | | |
 |---|---|
-| **Sign** | LaBelle Industries **202 LA Express** LED programmable message display (LaBelle Industries, Oconomowoc, WI) |
+| **Sign** | **LaBelle 202 LA Express** LED programmable message display, made by LaBelle Industries (**LaBelle Display Sciences Group**), Oconomowoc, Wisconsin |
 | **Firmware** | **V5.0** (the only version tested) |
 | **Original remote** | LaBelle IR keyboard: 48 keys plus **Control** and **Shift**, 9 V battery, quick-reference instructions on the underside |
+
+![Rating label on the back of a LaBelle 202 LA Express: model, serial number, blank volts/hertz "AC ONLY" and max input power fields, LaBelle Display Sciences Group logo](docs/images/rating-label.jpg)
+
+*The rating label on the sign documented here. The volts, hertz and input
+power fields were left blank at the factory.*
 
 The sign has a small IR receiver window behind the red display lens. The
 original keyboard sends to it from up to about 30 ft away.
@@ -44,12 +49,15 @@ The sign described here came **without its power supply**, and its original
 input voltage and current rating aren't known. Most units found secondhand
 are likely in the same position.
 
-- **Original supply:** there's a **bridge rectifier directly behind the power
-  jack**. That suggests the sign was designed for a low-voltage **AC** wall
-  transformer. The INFO 152 manual for a sister model also describes a plug-in
-  "power transformer".
-- **DC works too:** because of the rectifier, a DC supply of either polarity
-  also works. Expect about 1.4 V to be lost across the rectifier.
+- **Original supply:** the rating label reads **"___ VOLTS ___ HERTZ AC
+  ONLY"**, but the voltage, frequency and maximum input power were never
+  filled in. There's also a **bridge rectifier directly behind the power
+  jack**. Both point to a low-voltage **AC** wall transformer, and the INFO
+  152 manual for a sister model describes a plug-in "power transformer" as
+  well.
+- **DC works too:** despite the "AC only" label, the rectifier means a DC
+  supply of either polarity also works. Expect about 1.4 V to be lost across
+  the rectifier.
 - **Tested:** a **12 VDC, 2 A switch-mode supply** runs the sign normally, but
   the supply runs hotter than is comfortable. The load is plausibly around
   2 A, since the sign has a full LED matrix plus 1980s logic that's probably
@@ -333,5 +341,12 @@ labelle_web.py           web keyboard server (uses labelle_gc)
 web/                     phone web app (index.html, manifest, icon)
 codes/labelle-202-rc5.csv  all key codes with Pronto hex
 docs/OPERATING.md        operating instructions for the sign
-docs/images/             README screenshot
+docs/images/             README screenshot and rating-label photo
 ```
+
+## License
+
+[MIT](LICENSE) © 2026 Howard Bertolo.
+
+LaBelle is a name of LaBelle Industries. This project is independent and
+isn't affiliated with or endorsed by LaBelle.
