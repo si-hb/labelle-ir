@@ -1,0 +1,16 @@
+__pycache__/
+
+# Research material stays out of the public repo: ROM dumps, AMX/Crestron
+# IR files, Pronto/Vert exports, scanned manuals and photos.
+*.bin
+*.BIN
+*.irl
+*.IRL
+*.ir
+*.IR
+*.ccf
+*.pdf
+*.jpg
+*.jpeg
+*.PNG
+analysis/

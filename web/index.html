@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LaBelle">
+<meta name="theme-color" content="#d9d3c4">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
+<title>LaBelle Keyboard</title>
+<style>
+:root {
+  --case: #d9d3c4;
+  --panel: #e6e1d3;
+  --key: #b5aca0;
+  --key-top: #c4bcb1;
+  --key-edge: #8f867b;
+  --ink: #4a4540;
+  --orange: #e2572b;
+  --blue: #3a86d6;
+  --ok: #2e9e5b;
+  --err: #c93a2e;
+  --sl: env(safe-area-inset-left, 0px);
+  --sr: env(safe-area-inset-right, 0px);
+  --st: env(safe-area-inset-top, 0px);
+  --sb: env(safe-area-inset-bottom, 0px);
+  --u: min(calc((100vw - var(--sl) - var(--sr) - 20px) / 14.6),
+           calc((100dvh - var(--st) - var(--sb) - 44px) / 6.9));
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden;
+  background: var(--case); color: var(--ink);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+body {
+  padding: var(--st) var(--sr) var(--sb) var(--sl);
+  display: flex; flex-direction: column;
+}
+header {
+  height: 38px; flex: none; display: flex; align-items: center; gap: 10px;
+  padding: 0 10px; font-size: 13px;
+}
+.brand { font-weight: 700; letter-spacing: -0.5px; font-size: 15px; }
+.brand::before { content: "≡"; margin-right: 3px; color: #7b7368; }
+#dot { width: 9px; height: 9px; border-radius: 50%; background: #999; flex: none; }
+#dot.ok { background: var(--ok); } #dot.bad { background: var(--err); }
+#last { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        font-variant-numeric: tabular-nums; }
+#last.err { color: var(--err); }
+header button {
+  font: inherit; font-size: 12px; border: 1px solid var(--key-edge); background: var(--panel);
+  color: var(--ink); border-radius: 6px; padding: 4px 9px;
+}
+main {
+  flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  gap: calc(var(--u) * 0.24);
+  background: var(--panel); margin: 0 6px 6px; border-radius: 8px;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.12);
+}
+.row { display: flex; gap: calc(var(--u) * 0.1); }
+.cell { width: calc(var(--u) * var(--w, 1) - var(--u) * 0.1); display: flex; flex-direction: column; align-items: center; }
+.legend {
+  height: calc(var(--u) * 0.3); font-size: calc(var(--u) * 0.2); line-height: calc(var(--u) * 0.3);
+  white-space: nowrap; font-weight: 600; letter-spacing: -0.2px;
+}
+.legend.o { color: var(--orange); } .legend.b { color: var(--blue); }
+.key {
+  position: relative; width: 100%; height: calc(var(--u) * 0.66);
+  background: linear-gradient(var(--key-top), var(--key));
+  border-radius: calc(var(--u) * 0.1);
+  box-shadow: 0 calc(var(--u) * 0.05) 0 var(--key-edge), 0 calc(var(--u) * 0.07) calc(var(--u) * 0.08) rgba(0,0,0,.25);
+  display: flex; align-items: center; justify-content: center; gap: calc(var(--u) * 0.06);
+  font-size: calc(var(--u) * 0.34); font-style: italic; font-weight: 600; color: #5d5750;
+  touch-action: none; cursor: pointer;
+  transition: transform .05s, box-shadow .05s, background .15s;
+}
+.key .sh { font-size: calc(var(--u) * 0.2); align-self: flex-start; margin-top: calc(var(--u) * 0.1); font-style: normal; }
+.key.small { font-size: calc(var(--u) * 0.24); }
+.key.down { transform: translateY(calc(var(--u) * 0.05)); box-shadow: 0 0 0 var(--key-edge); background: var(--key); }
+.key.sent { background: linear-gradient(#cfe8d6, #a9cdb3); }
+.key.fail { background: linear-gradient(#f0c5c0, #d9938b); }
+.key.armed { background: linear-gradient(#f3dcae, #d9b877); }
+.key.locked { background: linear-gradient(#f0c07a, #cf9336); }
+body.mod-ctrl .legend { transform: scale(1.12); }
+body.mod-ctrl .key:not(.mod) .main, body.mod-shift .key:not(.mod) .main { opacity: .45; }
+body.mod-shift .key .sh { font-size: calc(var(--u) * 0.3); color: #2c2824; }
+.ctrlmark { display: inline-flex; gap: 4px; }
+.ctrlmark i { width: calc(var(--u)*0.16); height: calc(var(--u)*0.12); display: inline-block; }
+.space .key { height: calc(var(--u) * 0.45); background: linear-gradient(#c9b99b, #a8977a); }
+#rotate { display: none; position: fixed; inset: 0; background: var(--case); z-index: 9;
+  align-items: center; justify-content: center; text-align: center; font-size: 18px; padding: 30px; }
+@media (orientation: portrait) { #rotate { display: flex; } }
+</style>
+</head>
+<body>
+<div id="rotate">Turn the phone sideways<br>to use the LaBelle keyboard.</div>
+<header>
+  <span id="dot" title="iTach status"></span>
+  <span class="brand">LaBelle</span>
+  <span id="last">Tap a key</span>
+  <button id="bTiming" title="IR timing: as captured (818 µs) or RC5 standard (889 µs @ 36 kHz)">Timing: …</button>
+  <button id="bType">Type…</button>
+  <button id="bRaw">Raw…</button>
+</header>
+<main id="kb"></main>
+<script>
+// key: [base, rc5 cmd, keycap, shift char, control legend, legend colour o|b, width, plain cmd]
+// Plain ←/→ are swapped (plain cmd) so the message moves the way the arrow points;
+// Control+← Insert, Control+→ Delete and Shift ↑/↓ keep the keyboard's codes.
+const ROWS = [
+  [["1",7,"1","!","Twinkle","o"],["2",15,"2","\"","Tear","o"],["3",23,"3","#","Paint","o"],
+   ["4",31,"4","$","Wiggle","o"],["5",39,"5","%","Slide","o"],["6",47,"6","¢","Jaws","o"],
+   ["7",53,"7","&","Swirl","o"],["8",45,"8","*","Shoot","o"],["9",37,"9","(","F1","b"],
+   ["0",29,"0",")","F2","b"],["-",21,"–","'","F3","b"],["=",13,"=","+","F4","b"],
+   ["LAMP",5,"Lamp","£","Cap Lock","b"]],
+  [["pad",0.35],["Q",6,"Q","","Pause","b"],["W",14,"W","","Wide","b"],["E",22,"E","","Flash","o"],
+   ["R",30,"R","","Blink","o"],["T",38,"T","","Reverse","o"],["Y",46,"Y","","Random","o"],
+   ["U",54,"U","","Open","o"],["I",51,"I","","Close","o"],["O",43,"O","","Scan","o"],
+   ["P",35,"P","","Wipe","o"],["EDIT",27,"Edit","Ñ","Memory","b"],["RUN",19,"Run","","New","b"],
+   ["pad",0.65]],
+  [["CTRL",-1,"Control","","", "", 1.5],["A",4,"A","","Time","b"],["S",12,"S","","Day","b"],
+   ["D",20,"D","","Date","b"],["F",28,"F","","Idle","b"],["G",36,"G","","Center","b"],
+   ["H",44,"H","","Rot ←","o"],["J",52,"J","","Rot →","o"],["K",50,"K","","Instant","o"],
+   ["L",34,"L","","Drop","o"],[";",18,";",":","Schedule","b"],["<-",11,"←","↑","Insert","b",1,3],
+   ["->",3,"→","↓","Delete","b",1,11]],
+  [["SHIFT",-2,"Shift","","","",1.5],["Z",1,"Z","","Speed","b"],["X",9,"X","","Graphic","b"],
+   ["C",17,"C","","Tone","b"],["V",25,"V","","Scroll ↑","o"],["B",33,"B","","Scroll ↓","o"],
+   ["N",41,"N","","Kick On","o"],["M",49,"M","","Kick Off","o"],[",",42,",","<","Options","b"],
+   [".",26,".",">","Demo","b"],["/",10,"/","?","Clear End","b"],["SHIFT",-2,"Shift","","","",1.5]],
+  [["pad",1.2],["SPACE",2,"","","","",9.5],["pad",1.2]],
+];
+const SYS = {plain: 0, shift: 1, ctrl: 4};
+const kb = document.getElementById("kb"), last = document.getElementById("last");
+const dot = document.getElementById("dot");
+let mod = null, modLocked = false, lastModTap = 0;
+
+function build() {
+  for (const row of ROWS) {
+    const r = document.createElement("div");
+    r.className = "row" + (row.some(k => k[0] === "SPACE") ? " space" : "");
+    for (const k of row) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      if (k[0] === "pad") { cell.style.setProperty("--w", k[1]); r.appendChild(cell); continue; }
+      const [base, cmd, cap, sh, leg, col, w, plainCmd] = k;
+      cell.style.setProperty("--w", w || 1);
+      const lg = document.createElement("div");
+      lg.className = "legend " + (col || "");
+      if (base === "CTRL") lg.innerHTML = '<span class="ctrlmark"><i style="background:var(--orange)"></i><i style="background:var(--blue)"></i></span>';
+      else lg.textContent = leg || " ";
+      const key = document.createElement("div");
+      key.className = "key" + (cmd < 0 ? " mod small" : "") + (cap.length > 2 ? " small" : "");
+      key.innerHTML = `<span class="main">${cap}</span>` + (sh ? `<span class="sh">${sh}</span>` : "");
+      key.dataset.base = base;
+      key.dataset.cmd = cmd;
+      key.dataset.plaincmd = plainCmd ?? cmd;
+      key.dataset.cap = cap; key.dataset.sh = sh || ""; key.dataset.leg = leg || "";
+      attach(key);
+      cell.append(lg, key);
+      r.appendChild(cell);
+    }
+    kb.appendChild(r);
+  }
+}
+
+function setMod(m, locked) {
+  mod = m; modLocked = !!locked;
+  document.body.classList.toggle("mod-ctrl", mod === "ctrl");
+  document.body.classList.toggle("mod-shift", mod === "shift");
+  document.querySelectorAll(".key.mod").forEach(el => {
+    const mine = (el.dataset.base === "CTRL" && mod === "ctrl") || (el.dataset.base === "SHIFT" && mod === "shift");
+    el.classList.toggle("armed", mine && !modLocked);
+    el.classList.toggle("locked", mine && modLocked);
+  });
+}
+
+function tapMod(which) {
+  const now = Date.now();
+  if (mod === which && now - lastModTap < 350) setMod(which, true);      // double tap = lock
+  else if (mod === which) setMod(null);                                  // tap again = cancel
+  else setMod(which, false);                                             // arm for next key
+  lastModTap = now;
+}
+
+function describe(el, m) {
+  if (m === "ctrl") return `Control+${el.dataset.cap || "Space"}${el.dataset.leg ? " (" + el.dataset.leg + ")" : ""}`;
+  if (m === "shift") return `Shift+${el.dataset.cap || "Space"}${el.dataset.sh ? " (" + el.dataset.sh + ")" : ""}`;
+  return el.dataset.cap || "Space";
+}
+
+async function post(path, body) {
+  const r = await fetch(path, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.error || r.status);
+  return j;
+}
+
+async function send(sys, cmd, label, held) {
+  const j = await post("/api/press", {sys, cmd, label, held: !!held});
+  return j;
+}
+
+function flash(el, cls) {
+  el.classList.remove("sent", "fail"); void el.offsetWidth;
+  el.classList.add(cls);
+  setTimeout(() => el.classList.remove(cls), 350);
+}
+
+function attach(el) {
+  let holding = false, holdTimer = null;
+  el.addEventListener("pointerdown", async (ev) => {
+    ev.preventDefault();
+    el.setPointerCapture(ev.pointerId);
+    el.classList.add("down");
+    const cmd = +el.dataset.cmd;
+    if (cmd === -1) { tapMod("ctrl"); return; }
+    if (cmd === -2) { tapMod("shift"); return; }
+    const m = mod || "plain", sys = SYS[m], label = describe(el, m);
+    const code = m === "plain" ? +el.dataset.plaincmd : cmd;
+    if (mod && !modLocked) setMod(null);
+    holding = true;
+    try {
+      const j = await send(sys, code, label);
+      dot.className = "ok";
+      last.textContent = `${label}  ·  sys ${sys} cmd ${code} t${j.toggle}`;
+      last.classList.remove("err"); flash(el, "sent");
+      if (navigator.vibrate) navigator.vibrate(10);
+    } catch (e) {
+      last.textContent = `${label}: ${e.message}`; last.classList.add("err"); flash(el, "fail");
+      holding = false; return;
+    }
+    // Held key: keep sending frames with the same toggle, like a real held key.
+    holdTimer = setTimeout(async function loop() {
+      while (holding) {
+        try { await send(sys, code, label, true); } catch (e) { break; }
+      }
+    }, 450);
+  });
+  const up = () => { holding = false; clearTimeout(holdTimer); el.classList.remove("down"); };
+  el.addEventListener("pointerup", up);
+  el.addEventListener("pointercancel", up);
+  el.addEventListener("lostpointercapture", up);
+}
+
+document.getElementById("bType").onclick = async () => {
+  const t = prompt("Text to type on the sign (plain and shifted characters):");
+  if (!t) return;
+  last.textContent = `Typing “${t}”…`;
+  try { await post("/api/type", {text: t}); last.textContent = `Typed “${t}”`; last.classList.remove("err"); }
+  catch (e) { last.textContent = `Type failed: ${e.message}`; last.classList.add("err"); }
+};
+document.getElementById("bRaw").onclick = async () => {
+  const t = prompt("Raw RC5 code: system command  (e.g. 5 19)");
+  if (!t) return;
+  const [s, c] = t.trim().split(/[\s,]+/).map(Number);
+  try { const j = await send(s, c, "raw"); last.textContent = `Raw sys ${s} cmd ${c} t${j.toggle}`; last.classList.remove("err"); }
+  catch (e) { last.textContent = `Raw failed: ${e.message}`; last.classList.add("err"); }
+};
+
+const bTiming = document.getElementById("bTiming");
+function showTiming(t) { bTiming.dataset.t = t; bTiming.textContent = "Timing: " + (t === "standard" ? "Std" : "Cap"); }
+bTiming.onclick = async () => {
+  const next = bTiming.dataset.t === "standard" ? "captured" : "standard";
+  try { const j = await post("/api/timing", {timing: next}); showTiming(j.timing);
+        last.textContent = `IR timing: ${j.timing}`; last.classList.remove("err"); }
+  catch (e) { last.textContent = `Timing change failed: ${e.message}`; last.classList.add("err"); }
+};
+
+async function status() {
+  try {
+    const j = await (await fetch("/api/status")).json();
+    if (j.timing) showTiming(j.timing);
+    dot.className = j.ok ? "ok" : "bad";
+    dot.title = j.ok ? `iTach ${j.host} port ${j.port} · ${j.version}` : j.error;
+  } catch (e) { dot.className = "bad"; }
+}
+build(); status(); setInterval(status, 30000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) status(); });
+document.addEventListener("gesturestart", e => e.preventDefault());
+</script>
+</body>
+</html>
