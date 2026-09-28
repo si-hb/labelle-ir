@@ -38,6 +38,61 @@ Other LaBelle signs of the same era (the INFO 152 family, for example) use a
 very similar command set. Wired-keyboard models may not have an IR receiver,
 and other firmware versions haven't been tested.
 
+### Power supply
+
+The sign described here came **without its power supply**, and its original
+input voltage and current rating aren't known. Most units found secondhand
+are likely in the same position.
+
+- **Original supply:** there's a **bridge rectifier directly behind the power
+  jack**. That suggests the sign was designed for a low-voltage **AC** wall
+  transformer. The INFO 152 manual for a sister model also describes a plug-in
+  "power transformer".
+- **DC works too:** because of the rectifier, a DC supply of either polarity
+  also works. Expect about 1.4 V to be lost across the rectifier.
+- **Tested:** a **12 VDC, 2 A switch-mode supply** runs the sign normally, but
+  the supply runs hotter than is comfortable. The load is plausibly around
+  2 A, since the sign has a full LED matrix plus 1980s logic that's probably
+  5 V.
+- **Recommended:** a **12 VDC supply rated 4 A or more**. That's double the
+  tested supply's rating, and 5 A gives extra margin. A regulated
+  switch-mode supply from a reputable maker is the sensible choice.
+
+Cautions:
+
+- **Don't go above 12 V without checking inside.** The input rating is
+  unknown. The internal 5 V regulator is probably a linear type, which turns
+  every extra volt into heat. Check how hot the regulator gets on first
+  power-up and after an hour of running.
+- **Check the plug.** Before connecting a new supply, confirm the plug fits
+  the sign's jack securely.
+- **Low-voltage supplies only.** Never connect mains voltage to the sign's
+  power jack.
+
+### Memory backup battery
+
+The sign has an internal battery that keeps the stored messages, and
+probably the clock and calendar, when power is off.
+
+On the unit documented here, which was in near-new condition, the battery had
+**only one of its two pins soldered to the board**. The other was loose. It
+may once have had an insulator fitted, with the intention that the seller
+solder it at the point of sale; that's a guess. Either way, with an unsoldered
+battery the sign **won't keep its messages or the time** when it's
+unplugged.
+
+If you have one of these signs:
+
+- **If messages or the time disappear after a power cut,** open the sign and
+  check that both battery pins are soldered.
+- **Replace the battery.** These units are decades old, so the original
+  battery is almost certainly worn out, whether or not it was ever
+  connected. Fit a replacement with the same voltage and chemistry as the
+  original (check what's printed on it).
+- **Look for leakage.** Old rechargeable backup batteries often leak and
+  corrode the board around them. If there's any sign of leakage, remove the
+  battery and clean the area.
+
 ## Control hardware
 
 | | |

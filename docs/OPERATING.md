@@ -361,6 +361,10 @@ The time, day and date can only be set while you're **entering or editing a
 message** that contains them. If power is lost, the clock stops and has to be
 set again.
 
+> If messages or the time are lost every time the sign is unplugged, the
+> internal backup battery is probably disconnected or worn out. See
+> [Memory backup battery](../README.md#memory-backup-battery) in the README.
+
 ### Entering the value as digits
 
 This is the method printed on the IR keyboard.
