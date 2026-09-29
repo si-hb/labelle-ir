@@ -45,35 +45,61 @@ and other firmware versions haven't been tested.
 
 ### Power supply
 
-The sign described here came **without its power supply**, and its original
-input voltage and current rating aren't known. Most units found secondhand
-are likely in the same position.
+The sign described here came **without its power supply**, and there's no
+official rating for it. Most units found secondhand are likely in the same
+position. Nothing below is a LaBelle specification. It's what's known, what's
+reported, and what one owner happened to use.
 
-- **Original supply:** the rating label reads **"___ VOLTS ___ HERTZ AC
-  ONLY"**, but the voltage, frequency and maximum input power were never
-  filled in. There's also a **bridge rectifier directly behind the power
-  jack**. Both point to a low-voltage **AC** wall transformer, and the INFO
-  152 manual for a sister model describes a plug-in "power transformer" as
-  well.
-- **DC works too:** despite the "AC only" label, the rectifier means a DC
-  supply of either polarity also works. Expect about 1.4 V to be lost across
-  the rectifier.
-- **Tested:** a **12 VDC, 2 A switch-mode supply** runs the sign normally, but
-  the supply runs hotter than is comfortable. The load is plausibly around
-  2 A, since the sign has a full LED matrix plus 1980s logic that's probably
-  5 V.
-- **Recommended:** a **12 VDC supply rated 4 A or more**. That's double the
-  tested supply's rating, and 5 A gives extra margin. A regulated
-  switch-mode supply from a reputable maker is the sensible choice.
+**What's known**
 
-Cautions:
+- **Rating label:** the label reads **"___ VOLTS ___ HERTZ AC ONLY"** and
+  **"MAX. INPUT POWER ___"**, but none of those fields were filled in.
+- **Bridge rectifier:** there's one directly behind the power jack. That fits
+  a low-voltage **AC** wall transformer, and the INFO 152 manual for a sister
+  model also describes a plug-in "power transformer".
+- **DC input:** because of the rectifier, DC of either polarity also powers
+  the sign, whatever the "AC only" label says. About 1.4 V is lost across the
+  rectifier.
 
-- **Don't go above 12 V without checking inside.** The input rating is
-  unknown. The internal 5 V regulator is probably a linear type, which turns
-  every extra volt into heat. Check how hot the regulator gets on first
-  power-up and after an hour of running.
-- **Check the plug.** Before connecting a new supply, confirm the plug fits
-  the sign's jack securely.
+**What's reported**
+
+Owners in forums mention an **8 VAC** supply. That hasn't been confirmed from
+LaBelle documentation. After the bridge and filter capacitor, 8 VAC gives the
+sign's internal circuit roughly **9–11 V DC**:
+
+- Peak: 8 × 1.414 ≈ 11.3 V.
+- Minus about 1.4 V across the bridge: ≈ 9.9 V.
+- Lower on average under load, when the capacitor sags between peaks.
+- Somewhat higher at light load, since unregulated transformers run above
+  their label.
+
+For a DC supply to give the circuit roughly the same voltage:
+
+| DC input | After the bridge | Compared with 8 VAC |
+|---|---|---|
+| 9 V | ~7.6 V | Probably too low: a linear 5 V regulator needs about 7 V in, which leaves almost no margin |
+| 10 V | ~8.6 V | Close to 8 VAC under load |
+| 12 V | ~10.6 V | About 8 VAC's peak, a little above its loaded average |
+| 15 V or more | ~13.6 V or more | Above anything 8 VAC produces |
+
+**What was used here**
+
+The sign in this project has been running on a **12 VDC, 2 A switch-mode
+supply**. That was simply what was on hand; it isn't a recommendation. The
+sign works normally on it, but the supply runs hotter than is comfortable,
+which suggests the load is close to 2 A. **If you use a similar supply, pick
+one rated around double that current (4 A or more).** An 8 VAC transformer
+would need a VA rating well above volts × amps, roughly 30 VA or more for a
+2 A load, because a bridge and capacitor draw current in short peaks.
+
+**Before choosing a supply**
+
+- **Check the regulator.** Open the sign and read the part number on the
+  5 V regulator. If it's a linear type (7805-style), every volt above what it
+  needs becomes heat, so lower input voltage is kinder. With the sign
+  running, measure the DC voltage across the main filter capacitor and check
+  how hot the regulator gets after an hour.
+- **Check the plug.** Confirm it fits the sign's jack securely.
 - **Low-voltage supplies only.** Never connect mains voltage to the sign's
   power jack.
 
